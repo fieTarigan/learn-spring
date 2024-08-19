@@ -12,7 +12,7 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
-public class CashCardJsonTest {
+class CashCardJsonTest {
 
     @Autowired
     private JacksonTester<CashCard> json;
@@ -25,9 +25,9 @@ public class CashCardJsonTest {
     @BeforeEach
     public void setUp() {
         cashCards = Arrays.array(
-                new CashCard(99L, 123.45),
-                new CashCard(100L, 1.00),
-                new CashCard(101L, 150.00)
+                new CashCard(99L, 123.45, "sarah1"),
+                new CashCard(100L, 1.00, "sarah1"),
+                new CashCard(101L, 150.00, "sarah1")
         );
     }
 
@@ -48,11 +48,12 @@ public class CashCardJsonTest {
         String content = """
                 {
                     "id": 99,
-                    "amount": 123.45
+                    "amount": 123.45, 
+                    "owner": "sarah1"
                 }
                 """;
         CashCard cashCard = json.parse(content).getObject();
-        assertThat(cashCard).isEqualTo(new CashCard(99L, 123.45));
+        assertThat(json.parse(content)).isEqualTo(new CashCard(99L, 123.45, "sarah1"));
         assertThat(cashCard.id()).isEqualTo(99);
         assertThat(cashCard.amount()).isEqualTo(123.45);
     }
@@ -66,9 +67,10 @@ public class CashCardJsonTest {
     void cashCardListDesererializationTest() throws IOException {
         String content = """
                 [
-                    { "id": 99, "amount": 123.45 },
-                    { "id": 100, "amount": 1.00 },
-                    { "id": 101, "amount": 150.00 }
+                     {"id": 99, "amount": 123.45 , "owner": "sarah1"},
+                     {"id": 100, "amount": 1.00 , "owner": "sarah1"},
+                     {"id": 101, "amount": 150.00, "owner": "sarah1"}
+                                                  
                 ]
                 """;
         CashCard[] cashCards = jsonList.parse(content).getObject();
